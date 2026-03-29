@@ -1,34 +1,3 @@
----
-title: Generic Undirected Graph
-author: Milán Várady
-date: 2026-03-29
----
-
-# Generic Undirected Graph
-
-**Project Specification**
-
-> Basics of Programming 2
->
-> Budapest University of Technology and Economics
->
-> Milán Várady Neptun: WQRIQI
->
-> 2026.03.29.
-
-## Table of Contents
-
-1. [Overview](#overview)
-2. [Graph Storage](#graph-storage)
-3. [Classes](#classes)
-   1. [Array](#array)
-   2. [Node](#node)
-   3. [Graph](#graph)
-   4. [Queue](#queue)
-4. [UML Diagram](#uml-diagram)
-5. [Key Algorithms](#key-algorithms)
-6. [Testing](#testing)
-
 ## Overview
 
 The project implements a generic undirected graph in C++11. The graph uses an adjacency matrix for storage, with nodes represented by a dedicated class. Tests are written in a separate module. The project doesn't have a main executable. It's only the Graph data structure and the tests.
@@ -125,7 +94,7 @@ A simple heap-allocated FIFO queue, using a circular buffer. Declared as a priva
 
 ## UML diagram
 
-![](uml-diagram/uml-diagram.svg)
+![](./uml-diagram/uml-diagram.png)
 
 ## Key Algorithms
 

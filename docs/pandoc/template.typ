@@ -16,6 +16,7 @@
   compact-mode: false,
   heading-font: "Lato",
   heading-color: accent,
+  datetime-fmt: "[year].[month].[day]",
   it
 )
 

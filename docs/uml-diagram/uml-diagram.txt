@@ -1,60 +1,71 @@
 classDiagram
-      class Array~T~ {
-          -data: T*
-          -size: size_t
-          -capacity: size_t
-          +Array()
-          +Array(const Array&)
-          +operator=(const Array&) Array&
-          +~Array()
-          +pushBack(const T&)
-          +removeAt(size_t)
-          +operator[](size_t) T&
-          +getSize() size_t
-      }
+    class Persistable {
+        <<abstract>>
+        +encode() string*
+        +~Persistable()*
+    }
 
-      class Node~T~ {
-          -data: T
-          +Node(const T&)
-          +getData() const T&
-          +setData(const T&)
-          +operator=(const Node&) Node&
-          +operator==(const Node&) bool
-      }
+    class Array~T~ {
+        -data: T*
+        -size: size_t
+        -capacity: size_t
+        +Array()
+        +Array(const Array&)
+        +operator=(const Array&) Array&
+        +~Array()
+        +pushBack(const T&)
+        +removeAt(size_t)
+        +operator[](size_t) T&
+        +getSize() size_t
+    }
 
-      class Graph~T~ {
-          -nodes: Array~NodeT~
-          -matrix: Array~Array_bool~
-          -edgeCount: size_t
-          +Graph()
-          +Graph(const Graph&)
-          +operator=(const Graph&) Graph&
-          +~Graph()
-          +addNode(const T&)
-          +removeNode(size_t)
-          +addEdge(size_t, size_t)
-          +removeEdge(size_t, size_t)
-          +hasEdge(size_t, size_t) bool
-          +getNodeCount() size_t
-          +getEdgeCount() size_t
-          +isConnected() bool
-          +getNode(size_t) Node&
-          +print(ostream&)
-      }
+    class Node~T~ {
+        -data: T
+        +Node(const T&)
+        +getData() const T&
+        +setData(const T&)
+        +operator=(const Node&) Node&
+        +operator==(const Node&) bool
+        +operator<<(ostream&, const Node&)
+    }
 
-      class Queue {
-          -data: size_t*
-          -head: size_t
-          -tail: size_t
-          -capacity: size_t
-          +Queue(size_t)
-          +~Queue()
-          +enqueue(size_t)
-          +dequeue() size_t
-          +isEmpty() bool
-      }
+    class Graph~T~ {
+        -nodes: Array~Node~T~~
+        -matrix: Array~Array~bool~~
+        -edgeCount: size_t
+        +Graph()
+        +Graph(const Graph&)
+        +operator=(const Graph&) Graph&
+        +~Graph()
+        +addNode(const T&)
+        +removeNode(size_t)
+        +addEdge(size_t, size_t)
+        +removeEdge(size_t, size_t)
+        +hasEdge(size_t, size_t) bool
+        +getNodeCount() size_t
+        +getEdgeCount() size_t
+        +isConnected() bool
+        +getNode(size_t) Node~T~&
+        +print(ostream&)
+        +operator<<(ostream&, const Graph&)
+        +save(const string&)
+        +load(const string&)
+    }
 
-      Graph~T~ *-- Queue : private nested
-      Graph~T~ *-- Array~T~ : nodes
-      Graph~T~ *-- Array~T~ : matrix
-      Graph~T~ --> Node~T~ : stores
+    class Queue {
+        -data: size_t*
+        -head: size_t
+        -tail: size_t
+        -capacity: size_t
+        +Queue(size_t)
+        +~Queue()
+        +enqueue(size_t)
+        +dequeue() size_t
+        +isEmpty() bool
+    }
+
+    Graph~T~ *-- Queue : private nested
+    Graph~T~ *-- Array~T~ : nodes
+    Graph~T~ *-- Array~T~ : matrix
+    Graph~T~ *-- Node~T~ : owns
+    Node~T~ --|> Persistable : T extends

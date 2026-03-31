@@ -1,6 +1,6 @@
 ## Overview
 
-The project implements a generic undirected graph in C++11. The graph uses an adjacency matrix for storage, with nodes represented by a dedicated class. Tests are written in a separate module. The project doesn't have a main executable. It's only the Graph data structure and the tests.
+The project implements a generic undirected graph in C++11. The graph uses an adjacency matrix for storage, with nodes represented by a dedicated class. Tests are written in a separate module. The graph can be experimented with using a simple interactive program.
 
 ## Graph Storage
 
@@ -10,6 +10,7 @@ The graph nodes are stored in a dynamic array, the edges are represented by an a
   - The matrix is symmetric, `matrix[i][j] == matrix[j][i]` because the graph is undirected
 - Nodes are stored in a dynamically allocated array of node objects
 - Both the matrix and the array are reallocated when the number of nodes change (with capacity)
+- The matrix can be persisted into a file
 
 ## Classes
 
@@ -47,7 +48,7 @@ Wraps a single piece of data of type `T`.
 
 ### Graph
 
-Owns a dynamic node array and the associated adjacency matrix.
+Owns a dynamic node array and the associated adjacency matrix. `T` must derive from `Persistable` for `save()` and `load()` to work.
 
 > **Note:** the graph doesn't allow loops. This means values across the main diagonal are all 0.
 
@@ -61,7 +62,7 @@ Owns a dynamic node array and the associated adjacency matrix.
 - `operator=(const Graph&)`: deep copy assignment
 - `~Graph()`: destructor
 - `addNode(const T&)`: add node, reallocates if needed
-- `removeNode(size_t):` remove node at index, uses the `Array::removeAt()` method. Throws error if out of bounds.
+- `removeNode(size_t):` remove node at index, uses the `Array::removeAt()` method, and removes the row and column from the matrix. Throws error if out of bounds.
 - `addEdge(size_t, size_t)`: connects nodes `i` and `j`, no-op if edge already exists. Throws error if out of bounds, or `i == j` (loop).
 - `removeEdge(size_t, size_t)`: no-op if edge does not exist. Throws errors if out of bounds.
 - `hasEdge(size_t, size_t) -> bool`: error if out of bounds
@@ -71,6 +72,8 @@ Owns a dynamic node array and the associated adjacency matrix.
 - `getNode(size_t) -> Node<T>&`: error if out of bounds
 - `print(ostream&)`: prints node list and adjacency matrix
 - `operator<<(ostream&, const Graph<T>&)`: friend function, calls `print()`
+- `save(const std::string&)`: saves the graph to a file at the given path
+- `load(const std::string&)`: loads a graph from a file at the given path, replaces current state
 
 ### Queue
 
@@ -111,6 +114,85 @@ Returns true if every node is reachable from the first node via a [Breadth-First
 ### getEdgeCount
 
 Instead of calculating the edge count from the upper triangle matrix, we can just keep track of edges added by `addEdge()` and `removeEdge()`. This makes this an `O(1)` operation.
+
+## Persistence
+
+The matrix can be saved to a text file. The problem is because the graph is generic we need a way to represent the objects as text. To do this `Graph<T>` only accepts types that derive from a `Persistable` abstract class.
+
+```cpp
+class Persistable {
+public:
+    virtual std::string encode() const = 0;
+    virtual ~Persistable() {}
+};
+```
+
+Nodes are serialized by the `encode()` method. For deserialization in `Graph<T>` `T` must implement a **constructor** that takes `const std::string&` as a parameter. It must construct the object from the string saved by `encode()`.
+
+Data is saved in the following format:
+
+```
+CPPGraph vX.x
+<node count>
+<edge count>
+<node 1>
+<node 2>
+...
+<node n>
+0 1 ... 0
+...
+1 0 ... 1
+```
+
+- First line contains the save file version
+- Then we have the node and edge count
+- Then comes the nodes
+- Then the adjacency matrix
+
+## Interactive Mode
+
+The interactive mode can be used to run tests and play with the graph in a console-like interface. A sample `Graph<int>` is available with 4 nodes in the interactive mode.
+
+### Available Commands
+
+- `help`: prints available commands
+- `test`: runs the **gtest_lite** tests
+- `print`: prints the graph
+- `connect {node1} {node2}`: adds an edge between `node1` and `node2`
+- `disconnect {node1} {node2}`: removes edge between `node1` and `node2`
+- `connected`: checks if the graph is connected
+- `save`: saves the current graph state
+- `load`: loads previously saved graph state
+- `exit`: exits interactive mode
+
+### Example Usage
+
+```
+CPPGraph Interactive mode
+Type 'help' for available commands
+
+> print
+no edges
+> connect 1 2
+> print
+1--2
+> connect 2 3
+> connect 3 4
+> print
+1--2
+2--3
+3--4
+> connected
+true
+> save
+> disconnect 2 3
+> connected
+false
+> load
+> connected
+true
+> exit
+```
 
 ## Testing
 

@@ -2,9 +2,7 @@ memory/
 *.pdf
 
 # Build output
-cppgraph
-*.o
-*.d
+build/
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos,cmake,clion,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,cmake,clion,visualstudiocode
@@ -128,7 +126,6 @@ CMakeCache.txt
 CMakeFiles
 CMakeScripts
 Testing
-Makefile
 cmake_install.cmake
 install_manifest.txt
 compile_commands.json

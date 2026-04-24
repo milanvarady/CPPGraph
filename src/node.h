@@ -8,12 +8,16 @@ class Node {
     T data;
 
 public:
+    Node();
     Node(const T&);
     Node& operator=(const Node&);
     bool operator==(const Node<T>&) const;
     const T& getData() const;
     void setData(const T&);
 };
+
+template<typename T>
+Node<T>::Node() {};
 
 template<typename T>
 Node<T>::Node(const T& data) : data(data) {}

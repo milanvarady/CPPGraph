@@ -1,8 +1,9 @@
+#pragma once
+
 #include "../src/array.h"
 #include "../lib/gtest_lite.h"
-#include "../lib/memtrace.h"
 
-int main() {
+inline void array_tests() {
     // Constructor
     TEST(Array, DefaultConstructor) {
         Array<int> a;
@@ -152,6 +153,4 @@ int main() {
         EXPECT_EQ((size_t)2, b.getSize());
     }
     ENDM
-
-    return 0;
 }

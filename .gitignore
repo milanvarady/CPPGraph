@@ -1,6 +1,11 @@
 memory/
 *.pdf
 
+# Build output
+cppgraph
+*.o
+*.d
+
 # Created by https://www.toptal.com/developers/gitignore/api/macos,cmake,clion,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,cmake,clion,visualstudiocode
 

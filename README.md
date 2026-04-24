@@ -36,8 +36,8 @@ pandoc specification.md \
   --output=specification.pdf
 ```
 
-> [!TIP] Optional: Install fonts
->
+> [!TIP]
+> Optional: Install fonts
 > 1. Vollkorn
 > 2. Lato
 > 3. FiraCode Nerd Font Mono

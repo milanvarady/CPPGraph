@@ -200,4 +200,73 @@ inline void graph_tests() {
         EXPECT_EQ((size_t)3, g2.getNodeCount());
     }
     ENDM
+
+    // isConnected
+    TEST(Graph, IsConnectedEmptyGraph) {
+        Graph<int> g;
+        EXPECT_TRUE(g.isConnected());
+    }
+    ENDM
+
+    TEST(Graph, IsConnectedSingleNode) {
+        Graph<int> g;
+        g.addNode(1);
+        EXPECT_TRUE(g.isConnected());
+    }
+    ENDM
+
+    TEST(Graph, IsConnectedTwoNodesConnected) {
+        Graph<int> g;
+        g.addNode(1);
+        g.addNode(2);
+        g.addEdge(0, 1);
+        EXPECT_TRUE(g.isConnected());
+    }
+    ENDM
+
+    TEST(Graph, IsConnectedTwoNodesDisconnected) {
+        Graph<int> g;
+        g.addNode(1);
+        g.addNode(2);
+        EXPECT_FALSE(g.isConnected());
+    }
+    ENDM
+
+    TEST(Graph, IsConnectedChain) {
+        Graph<int> g;
+        g.addNode(1);
+        g.addNode(2);
+        g.addNode(3);
+        g.addNode(4);
+        g.addEdge(0, 1);
+        g.addEdge(1, 2);
+        g.addEdge(2, 3);
+        EXPECT_TRUE(g.isConnected());
+    }
+    ENDM
+
+    TEST(Graph, IsConnectedDisjointComponents) {
+        Graph<int> g;
+        g.addNode(1);
+        g.addNode(2);
+        g.addNode(3);
+        g.addNode(4);
+        g.addEdge(0, 1);
+        g.addEdge(2, 3);
+        EXPECT_FALSE(g.isConnected());
+    }
+    ENDM
+
+    TEST(Graph, IsConnectedAfterRemoveEdge) {
+        Graph<int> g;
+        g.addNode(1);
+        g.addNode(2);
+        g.addNode(3);
+        g.addEdge(0, 1);
+        g.addEdge(1, 2);
+        EXPECT_TRUE(g.isConnected());
+        g.removeEdge(1, 2);
+        EXPECT_FALSE(g.isConnected());
+    }
+    ENDM
 }

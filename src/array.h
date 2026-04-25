@@ -17,6 +17,7 @@ public:
     Array& operator=(const Array&);
     T& operator[](size_t);
     const T& operator[](size_t) const;
+    T& first();
     size_t getSize() const;
     void pushBack(const T&);
     void removeAt(size_t);
@@ -83,6 +84,14 @@ const T& Array<T>::operator[](size_t idx) const {
         throw std::out_of_range("Array [] operator out of bounds");
 
     return this->data[idx];
+}
+
+template<typename T>
+T& Array<T>::first() {
+    if (this->size < 1)
+        throw std::out_of_range("Array first: array is empty");
+
+    return this->data[0];
 }
 
 template<typename T>

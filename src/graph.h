@@ -215,8 +215,43 @@ size_t Graph<T>::getEdgeCount() const {
 
 template<typename T>
 bool Graph<T>::isConnected() const {
-    // TODO: implement
-    return false;
+    // Special cases
+    if (this->getNodeCount() == 0 || this->getNodeCount() == 1)
+        return true;
+
+    // Stores nodes that need to be explored
+    Queue queue = Queue(this->getNodeCount());
+
+    // Keep track of explored nodes
+    Array<bool> explored = Array<bool>(this->getNodeCount(), false);
+
+    // Label first node as explored
+    explored.first() = true;
+
+    // Enqueue root
+    queue.enqueue(0);
+
+    // By keeping track of the number of explored nodes
+    // we don't have to check the explored array at the end
+    // to check if all nodes were explored
+    size_t exploredNodeCount = 1;
+
+    // Traverse graph
+    while (!queue.isEmpty()) {
+        size_t node_idx = queue.dequeue();
+
+        for (size_t i = 0; i < this->getNodeCount(); i++) {
+            if (this->matrix[node_idx][i]) {
+                if (!explored[i]) {
+                    explored[i] = true;
+                    exploredNodeCount++;
+                    queue.enqueue(i);
+                }
+            }
+        }
+    }
+
+    return exploredNodeCount == this->getNodeCount();
 }
 
 template<typename T>

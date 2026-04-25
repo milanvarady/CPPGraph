@@ -11,6 +11,7 @@ class Array {
 
 public:
     Array(size_t capacity = 10);
+    Array(size_t size, T default_value);
     Array(const Array&);
     ~Array();
     Array& operator=(const Array&);
@@ -22,8 +23,17 @@ public:
 };
 
 template<typename T>
-Array<T>::Array(size_t capacity) : size(0), capacity(capacity) {
+Array<T>::Array(size_t capacity) : size(0), capacity(capacity > 0 ? capacity : 1) {
     this->data = new T[this->capacity];
+}
+
+template<typename T>
+Array<T>::Array(size_t size, T default_value) : size(size), capacity(size > 0 ? size : 1) {
+    this->data = new T[this->capacity];
+
+    for (size_t i = 0; i < this->size; i++) {
+        this->data[i] = default_value;
+    }
 }
 
 template<typename T>

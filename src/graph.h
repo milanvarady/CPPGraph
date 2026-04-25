@@ -143,16 +143,21 @@ void Graph<T>::removeNode(size_t idx) {
     if (idx >= this->getNodeCount())
         throw std::out_of_range("Graph removeNode out of range");
 
+    // Count edges to remove
+    for (size_t i = 0; i < this->getNodeCount(); i++) {
+        if (this->matrix[idx][i])
+            this->edgeCount--;
+    }
+
+    // Remove node
     this->nodes.removeAt(idx);
 
+    // Remove column from each row
     for (size_t i = 0; i < this->getNodeCount(); i++) {
-        // Decrement edge count if needed
-        if (this->matrix[i][idx])
-            this->edgeCount--;
-
         this->matrix[i].removeAt(idx);
     }
 
+    // Remove the row
     this->matrix.removeAt(idx);
 }
 

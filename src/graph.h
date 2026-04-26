@@ -2,6 +2,7 @@
 
 #include "array.h"
 #include "node.h"
+#include "persistable.h"
 
 #include <cstddef>
 #include <ostream>
@@ -11,6 +12,8 @@
 
 template<typename T>
 class Graph {
+    static_assert(std::is_base_of<Persistable, T>::value, "T must derive from Persistable");
+
     Array<Node<T>> nodes;
     Array<Array<bool>> matrix;
     size_t edgeCount;

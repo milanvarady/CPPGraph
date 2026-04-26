@@ -3,10 +3,30 @@
 #include "../src/graph.h"
 #include "../lib/gtest_lite.h"
 
+#include <string>
+
+// Simple Persistable int wrapper for testing
+class PInt : public Persistable {
+    int value;
+
+public:
+    PInt() : value(0) {}
+    PInt(int v) : value(v) {}
+    PInt(const std::string& s) : value(std::stoi(s)) {}
+    std::string encode() const { return std::to_string(value); }
+    int get() const { return value; }
+    bool operator==(const PInt& other) const { return value == other.value; }
+};
+
+inline std::ostream& operator<<(std::ostream& os, const PInt& p) {
+    os << p.get();
+    return os;
+}
+
 inline void graph_tests() {
     // Constructor
     TEST(Graph, EmptyGraph) {
-        Graph<int> g;
+        Graph<PInt> g;
         EXPECT_EQ((size_t)0, g.getNodeCount());
         EXPECT_EQ((size_t)0, g.getEdgeCount());
     }
@@ -14,20 +34,20 @@ inline void graph_tests() {
 
     // addNode
     TEST(Graph, AddNode) {
-        Graph<int> g;
+        Graph<PInt> g;
         g.addNode(10);
         g.addNode(20);
         g.addNode(30);
         EXPECT_EQ((size_t)3, g.getNodeCount());
-        EXPECT_EQ(10, g.getNode(0).getData());
-        EXPECT_EQ(20, g.getNode(1).getData());
-        EXPECT_EQ(30, g.getNode(2).getData());
+        EXPECT_EQ(PInt(10), g.getNode(0).getData());
+        EXPECT_EQ(PInt(20), g.getNode(1).getData());
+        EXPECT_EQ(PInt(30), g.getNode(2).getData());
     }
     ENDM
 
     // getNode
     TEST(Graph, GetNodeOutOfBounds) {
-        Graph<int> g;
+        Graph<PInt> g;
         g.addNode(1);
         EXPECT_THROW(g.getNode(1), std::out_of_range);
     }
@@ -35,7 +55,7 @@ inline void graph_tests() {
 
     // addEdge and hasEdge
     TEST(Graph, AddEdge) {
-        Graph<int> g;
+        Graph<PInt> g;
         g.addNode(1);
         g.addNode(2);
         g.addEdge(0, 1);
@@ -46,7 +66,7 @@ inline void graph_tests() {
     ENDM
 
     TEST(Graph, AddEdgeDuplicateIsNoop) {
-        Graph<int> g;
+        Graph<PInt> g;
         g.addNode(1);
         g.addNode(2);
         g.addEdge(0, 1);
@@ -56,14 +76,14 @@ inline void graph_tests() {
     ENDM
 
     TEST(Graph, AddEdgeSelfLoopThrows) {
-        Graph<int> g;
+        Graph<PInt> g;
         g.addNode(1);
         EXPECT_THROW(g.addEdge(0, 0), GraphError::SelfLoopNotAllowed);
     }
     ENDM
 
     TEST(Graph, AddEdgeOutOfBounds) {
-        Graph<int> g;
+        Graph<PInt> g;
         g.addNode(1);
         EXPECT_THROW(g.addEdge(0, 1), std::out_of_range);
     }
@@ -71,7 +91,7 @@ inline void graph_tests() {
 
     // hasEdge
     TEST(Graph, HasEdgeNoEdge) {
-        Graph<int> g;
+        Graph<PInt> g;
         g.addNode(1);
         g.addNode(2);
         EXPECT_FALSE(g.hasEdge(0, 1));
@@ -79,7 +99,7 @@ inline void graph_tests() {
     ENDM
 
     TEST(Graph, HasEdgeOutOfBounds) {
-        Graph<int> g;
+        Graph<PInt> g;
         g.addNode(1);
         EXPECT_THROW(g.hasEdge(0, 1), std::out_of_range);
     }
@@ -87,7 +107,7 @@ inline void graph_tests() {
 
     // removeEdge
     TEST(Graph, RemoveEdge) {
-        Graph<int> g;
+        Graph<PInt> g;
         g.addNode(1);
         g.addNode(2);
         g.addEdge(0, 1);
@@ -99,7 +119,7 @@ inline void graph_tests() {
     ENDM
 
     TEST(Graph, RemoveEdgeNonexistentIsNoop) {
-        Graph<int> g;
+        Graph<PInt> g;
         g.addNode(1);
         g.addNode(2);
         g.removeEdge(0, 1);
@@ -108,7 +128,7 @@ inline void graph_tests() {
     ENDM
 
     TEST(Graph, RemoveEdgeOutOfBounds) {
-        Graph<int> g;
+        Graph<PInt> g;
         g.addNode(1);
         EXPECT_THROW(g.removeEdge(0, 1), std::out_of_range);
     }
@@ -116,19 +136,19 @@ inline void graph_tests() {
 
     // removeNode
     TEST(Graph, RemoveNode) {
-        Graph<int> g;
+        Graph<PInt> g;
         g.addNode(10);
         g.addNode(20);
         g.addNode(30);
         g.removeNode(1);
         EXPECT_EQ((size_t)2, g.getNodeCount());
-        EXPECT_EQ(10, g.getNode(0).getData());
-        EXPECT_EQ(30, g.getNode(1).getData());
+        EXPECT_EQ(PInt(10), g.getNode(0).getData());
+        EXPECT_EQ(PInt(30), g.getNode(1).getData());
     }
     ENDM
 
     TEST(Graph, RemoveNodeUpdatesEdgeCount) {
-        Graph<int> g;
+        Graph<PInt> g;
         g.addNode(1);
         g.addNode(2);
         g.addNode(3);
@@ -143,7 +163,7 @@ inline void graph_tests() {
     ENDM
 
     TEST(Graph, RemoveNodeOutOfBounds) {
-        Graph<int> g;
+        Graph<PInt> g;
         g.addNode(1);
         EXPECT_THROW(g.removeNode(1), std::out_of_range);
     }
@@ -151,11 +171,11 @@ inline void graph_tests() {
 
     // Copy constructor
     TEST(Graph, CopyConstructor) {
-        Graph<int> g;
+        Graph<PInt> g;
         g.addNode(1);
         g.addNode(2);
         g.addEdge(0, 1);
-        Graph<int> g2(g);
+        Graph<PInt> g2(g);
         EXPECT_EQ(g.getNodeCount(), g2.getNodeCount());
         EXPECT_EQ(g.getEdgeCount(), g2.getEdgeCount());
         EXPECT_TRUE(g2.hasEdge(0, 1));
@@ -163,11 +183,11 @@ inline void graph_tests() {
     ENDM
 
     TEST(Graph, CopyIsDeep) {
-        Graph<int> g;
+        Graph<PInt> g;
         g.addNode(1);
         g.addNode(2);
         g.addEdge(0, 1);
-        Graph<int> g2(g);
+        Graph<PInt> g2(g);
         g2.removeEdge(0, 1);
         EXPECT_TRUE(g.hasEdge(0, 1));
         EXPECT_FALSE(g2.hasEdge(0, 1));
@@ -176,11 +196,11 @@ inline void graph_tests() {
 
     // Assignment operator
     TEST(Graph, AssignmentOperator) {
-        Graph<int> g;
+        Graph<PInt> g;
         g.addNode(1);
         g.addNode(2);
         g.addEdge(0, 1);
-        Graph<int> g2;
+        Graph<PInt> g2;
         g2 = g;
         EXPECT_EQ(g.getNodeCount(), g2.getNodeCount());
         EXPECT_EQ(g.getEdgeCount(), g2.getEdgeCount());
@@ -189,11 +209,11 @@ inline void graph_tests() {
     ENDM
 
     TEST(Graph, AssignmentIsDeep) {
-        Graph<int> g;
+        Graph<PInt> g;
         g.addNode(1);
         g.addNode(2);
         g.addEdge(0, 1);
-        Graph<int> g2;
+        Graph<PInt> g2;
         g2 = g;
         g2.addNode(3);
         EXPECT_EQ((size_t)2, g.getNodeCount());
@@ -203,20 +223,20 @@ inline void graph_tests() {
 
     // isConnected
     TEST(Graph, IsConnectedEmptyGraph) {
-        Graph<int> g;
+        Graph<PInt> g;
         EXPECT_TRUE(g.isConnected());
     }
     ENDM
 
     TEST(Graph, IsConnectedSingleNode) {
-        Graph<int> g;
+        Graph<PInt> g;
         g.addNode(1);
         EXPECT_TRUE(g.isConnected());
     }
     ENDM
 
     TEST(Graph, IsConnectedTwoNodesConnected) {
-        Graph<int> g;
+        Graph<PInt> g;
         g.addNode(1);
         g.addNode(2);
         g.addEdge(0, 1);
@@ -225,7 +245,7 @@ inline void graph_tests() {
     ENDM
 
     TEST(Graph, IsConnectedTwoNodesDisconnected) {
-        Graph<int> g;
+        Graph<PInt> g;
         g.addNode(1);
         g.addNode(2);
         EXPECT_FALSE(g.isConnected());
@@ -233,7 +253,7 @@ inline void graph_tests() {
     ENDM
 
     TEST(Graph, IsConnectedChain) {
-        Graph<int> g;
+        Graph<PInt> g;
         g.addNode(1);
         g.addNode(2);
         g.addNode(3);
@@ -246,7 +266,7 @@ inline void graph_tests() {
     ENDM
 
     TEST(Graph, IsConnectedDisjointComponents) {
-        Graph<int> g;
+        Graph<PInt> g;
         g.addNode(1);
         g.addNode(2);
         g.addNode(3);
@@ -258,7 +278,7 @@ inline void graph_tests() {
     ENDM
 
     TEST(Graph, IsConnectedAfterRemoveEdge) {
-        Graph<int> g;
+        Graph<PInt> g;
         g.addNode(1);
         g.addNode(2);
         g.addNode(3);

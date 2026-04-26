@@ -5,6 +5,7 @@
 #include "persistable.h"
 
 #include <cstddef>
+#include <fstream>
 #include <ostream>
 #include <stdexcept>
 #include <string>
@@ -37,8 +38,8 @@ public:
 
     void print(std::ostream&) const;
 
-    void save(const std::string& filename) const;
-    void load(const std::string& filename);
+    void save(const std::string& path) const;
+    void load(const std::string& path);
 
 private:
     class Queue {
@@ -291,11 +292,76 @@ void Graph<T>::print(std::ostream& os) const {
 }
 
 template<typename T>
-void Graph<T>::save(const std::string& filename) const {
-    // TODO: implement
+void Graph<T>::save(const std::string& path) const {
+    std::ofstream file(path);
+    if (!file.is_open())
+        throw std::runtime_error("Could not open file: " + path);
+
+    file << "CPPGraph v1.0" << std::endl;
+    file << this->getNodeCount() << std::endl;
+    file << this->getEdgeCount() << std::endl;
+
+    // Print nodes
+    for (size_t i = 0; i < this->getNodeCount(); i++) {
+        file << this->nodes[i].getData().encode() << std::endl;
+    }
+
+    // Print adjacency matrix
+    for (size_t i = 0; i < this->getNodeCount(); i++) {
+        for (size_t j = 0; j < this->getNodeCount(); j++) {
+            if (j > 0)
+                file << ' ';
+            file << (this->matrix[i][j] ? '1' : '0');
+        }
+        file << std::endl;
+    }
 }
 
 template<typename T>
-void Graph<T>::load(const std::string& filename) {
-    // TODO: implement
+void Graph<T>::load(const std::string& path) {
+    std::ifstream file(path);
+    if (!file.is_open())
+        throw std::runtime_error("Could not open file: " + path);
+
+    // Parse header
+    std::string header;
+    file >> header;
+
+    if (header != "CPPGraph")
+        throw std::runtime_error("Invalid file format");
+
+    // Parse version
+    std::string version;
+    file >> version;
+
+    // Consume leftover newline char
+    file.ignore();
+
+    // Clear current data
+    this->nodes.clear();
+    this->matrix.clear();
+
+    // Parse node and edge count
+    size_t nodeCount;
+    file >> nodeCount;
+    file.ignore();
+    file >> this->edgeCount;
+    file.ignore();
+
+    // Load node array
+    for (size_t i = 0; i < nodeCount; i++) {
+        std::string encoded;
+        std::getline(file, encoded);
+        this->nodes.pushBack(Node<T>(T(encoded)));
+    }
+
+    // Load matrix
+    for (size_t i = 0; i < nodeCount; i++) {
+        matrix.pushBack(Array<bool>());
+        for (size_t j = 0; j < nodeCount; j++) {
+            int cell;
+            file >> cell;
+            matrix[i].pushBack(cell != 0);
+        }
+    }
 }

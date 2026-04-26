@@ -21,6 +21,7 @@ public:
     size_t getSize() const;
     void pushBack(const T&);
     void removeAt(size_t);
+    void clear();
 };
 
 template<typename T>
@@ -50,7 +51,7 @@ Array<T>::Array(const Array& other) {
 
 template<typename T>
 Array<T>::~Array() {
-    delete[] data;
+    delete[] this->data;
 }
 
 template<typename T>
@@ -128,4 +129,11 @@ void Array<T>::removeAt(size_t idx) {
     }
 
     size--;
+}
+
+template<typename T>
+void Array<T>::clear() {
+    delete[] this->data;
+    this->size = 0;
+    this->data = new T[this->capacity];
 }

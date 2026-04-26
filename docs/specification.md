@@ -33,6 +33,7 @@ Used inside `Graph<T>` as `Array<Node<T>>` for the node list and as `Array<Array
 - `operator[](size_t) -> T&`: Element access, throws error if out of bounds
 - `first() -> T&`: returns reference to the first element, throws error if empty
 - `getSize() -> size_t`: returns the current number of elements
+- `clear()`: removes all elements, resets size to 0, keeps capacity
 
 ### Node
 

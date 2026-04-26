@@ -1,26 +1,23 @@
 classDiagram
-    class Persistable {
-        <<abstract>>
-        +encode() string*
-        +~Persistable()*
-    }
-
     class Array~T~ {
         -data: T*
         -size: size_t
         -capacity: size_t
-        +Array()
+        +Array(size_t)
+        +Array(size_t, T)
         +Array(const Array&)
         +operator=(const Array&) Array&
         +~Array()
         +pushBack(const T&)
         +removeAt(size_t)
         +operator[](size_t) T&
+        +first() T&
         +getSize() size_t
     }
 
     class Node~T~ {
         -data: T
+        +Node()
         +Node(const T&)
         +getData() const T&
         +setData(const T&)
@@ -36,7 +33,6 @@ classDiagram
         +Graph()
         +Graph(const Graph&)
         +operator=(const Graph&) Graph&
-        +~Graph()
         +addNode(const T&)
         +removeNode(size_t)
         +addEdge(size_t, size_t)
@@ -47,7 +43,6 @@ classDiagram
         +isConnected() bool
         +getNode(size_t) Node~T~&
         +print(ostream&)
-        +operator<<(ostream&, const Graph&)
         +save(const string&)
         +load(const string&)
     }
@@ -62,6 +57,12 @@ classDiagram
         +enqueue(size_t)
         +dequeue() size_t
         +isEmpty() bool
+    }
+
+    class Persistable {
+        <<abstract>>
+        +encode() string*
+        +~Persistable()*
     }
 
     Graph~T~ *-- Queue : private nested

@@ -23,13 +23,15 @@ Used inside `Graph<T>` as `Array<Node<T>>` for the node list and as `Array<Array
 - `data: T*`: heap-allocated buffer
 - `size: size_t`: current number of elements
 - `capacity: size_t`: Allocated capacity of the buffer
-- `Array() -> Array`: constructor
+- `Array(size_t) -> Array`: constructor, takes initial capacity (default 10, minimum 1)
+- `Array(size_t, T) -> Array`: constructor, creates array of given size filled with default value
 - `Array(const Array&) -> Array`: copy constructor
 - `operator= -> Array&`: Deep copy assignment
 - `~Array()`: destructor
 - `pushBack(const T&)`: append element, double capacity if needed
 - `removeAt(size_t)`: removes element at index and shifts other elements down
 - `operator[](size_t) -> T&`: Element access, throws error if out of bounds
+- `first() -> T&`: returns reference to the first element, throws error if empty
 - `getSize() -> size_t`: returns the current number of elements
 
 ### Node
@@ -39,6 +41,7 @@ Wraps a single piece of data of type `T`.
 #### Members and Methods
 
 - `data: T`: the value stored by the node
+- `Node()`: default constructor
 - `Node(const T&)`: constructor
 - `getData() -> const T&`
 - `setData(const T&)`
@@ -60,10 +63,9 @@ Owns a dynamic node array and the associated adjacency matrix. `T` must derive f
 - `Graph()`: constructor
 - `Graph(const Graph&)`: copy constructor
 - `operator=(const Graph&)`: deep copy assignment
-- `~Graph()`: destructor
 - `addNode(const T&)`: add node, reallocates if needed
 - `removeNode(size_t):` remove node at index, uses the `Array::removeAt()` method, and removes the row and column from the matrix. Throws error if out of bounds.
-- `addEdge(size_t, size_t)`: connects nodes `i` and `j`, no-op if edge already exists. Throws error if out of bounds, or `i == j` (loop).
+- `addEdge(size_t, size_t)`: connects nodes `i` and `j`, no-op if edge already exists. Throws `std::out_of_range` if out of bounds, or `GraphError::SelfLoopNotAllowed` if `i == j` (loop).
 - `removeEdge(size_t, size_t)`: no-op if edge does not exist. Throws errors if out of bounds.
 - `hasEdge(size_t, size_t) -> bool`: error if out of bounds
 - `getNodeCount() -> size_t`: returns `nodes.getSize()`
@@ -95,7 +97,7 @@ A simple heap-allocated FIFO queue, using a circular buffer. Declared as a priva
 - `dequeue() -> size_t`: returns index, moves `head` forward with wrapping
 - `isEmpty() -> bool`
 
-## UML diagram
+## UML Diagram
 
 ![](./uml-diagram/uml-diagram.png)
 

@@ -289,4 +289,63 @@ inline void graph_tests() {
         EXPECT_FALSE(g.isConnected());
     }
     ENDM
+
+    // save and load
+    TEST(Graph, SaveAndLoad) {
+        Graph<PInt> g;
+        g.addNode(10);
+        g.addNode(20);
+        g.addNode(30);
+        g.addEdge(0, 1);
+        g.addEdge(1, 2);
+        g.save("/tmp/cppgraph_test.txt");
+
+        Graph<PInt> g2;
+        g2.load("/tmp/cppgraph_test.txt");
+        EXPECT_EQ(g.getNodeCount(), g2.getNodeCount());
+        EXPECT_EQ(g.getEdgeCount(), g2.getEdgeCount());
+        EXPECT_EQ(PInt(10), g2.getNode(0).getData());
+        EXPECT_EQ(PInt(20), g2.getNode(1).getData());
+        EXPECT_EQ(PInt(30), g2.getNode(2).getData());
+        EXPECT_TRUE(g2.hasEdge(0, 1));
+        EXPECT_TRUE(g2.hasEdge(1, 2));
+        EXPECT_FALSE(g2.hasEdge(0, 2));
+    }
+    ENDM
+
+    TEST(Graph, LoadReplacesExistingState) {
+        Graph<PInt> g;
+        g.addNode(1);
+        g.addNode(2);
+        g.addEdge(0, 1);
+        g.save("/tmp/cppgraph_test2.txt");
+
+        Graph<PInt> g2;
+        g2.addNode(99);
+        g2.addNode(98);
+        g2.addNode(97);
+        g2.load("/tmp/cppgraph_test2.txt");
+        EXPECT_EQ((size_t)2, g2.getNodeCount());
+        EXPECT_EQ((size_t)1, g2.getEdgeCount());
+        EXPECT_EQ(PInt(1), g2.getNode(0).getData());
+    }
+    ENDM
+
+    TEST(Graph, SaveAndLoadEmptyGraph) {
+        Graph<PInt> g;
+        g.save("/tmp/cppgraph_test3.txt");
+
+        Graph<PInt> g2;
+        g2.load("/tmp/cppgraph_test3.txt");
+        EXPECT_EQ((size_t)0, g2.getNodeCount());
+        EXPECT_EQ((size_t)0, g2.getEdgeCount());
+    }
+    ENDM
+
+    TEST(Graph, LoadInvalidFileThrows) {
+        EXPECT_THROW(
+            Graph<PInt>().load("/tmp/nonexistent_file_cppgraph.txt"),
+            std::runtime_error);
+    }
+    ENDM
 }

@@ -5,6 +5,10 @@
 
 #include "playground.h"
 
+static const char* GREEN = "\033[32;1m";
+static const char* RED = "\033[31m";
+static const char* RESET = "\033[0m";
+
 Playground::Playground() {
     // Add 4 nodes
     for (size_t i = 0; i < 4; i++) {
@@ -22,7 +26,7 @@ void Playground::main() {
 
     std::string line;
     while (true) {
-        std::cout << "> ";
+        std::cout << GREEN << "> " << RESET;
 
         // Handle Ctrl+D
         if (!std::getline(std::cin, line))
@@ -43,14 +47,14 @@ void Playground::main() {
             if (ss >> u >> v) {
                 this->connect(u, v);
             } else {
-                std::cout << "Error: connect requires two node IDs." << std::endl;
+                std::cout << RED << "Error: connect requires two node IDs." << RESET << std::endl;
             }
         } else if (cmd == "disconnect") {
             size_t u, v;
             if (ss >> u >> v) {
                 this->disconnect(u, v);
             } else {
-                std::cout << "Error: disconnect requires two node IDs." << std::endl;
+                std::cout << RED << "Error: disconnect requires two node IDs." << RESET << std::endl;
             }
         } else if (cmd == "connected") {
             std::cout << (this->graph.isConnected() ? "true" : "false") << std::endl;
@@ -59,7 +63,7 @@ void Playground::main() {
         } else if (cmd == "load") {
             this->load();
         } else {
-            std::cout << "Unknown command: " << cmd << ". Type 'help' for info." << std::endl;
+            std::cout << RED << "Unknown command: " << cmd << ". Type 'help' for info." << RESET << std::endl;
         }
     }
 }
@@ -136,7 +140,7 @@ void Playground::connect(size_t u, size_t v) {
     try {
         this->graph.addEdge(u, v);
     } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+        std::cout << RED << e.what() << RESET << std::endl;
     }
 }
 
@@ -144,7 +148,7 @@ void Playground::disconnect(size_t u, size_t v) {
     try {
         this->graph.removeEdge(u, v);
     } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+        std::cout << RED << e.what() << RESET << std::endl;
     }
 }
 

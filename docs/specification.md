@@ -52,7 +52,7 @@ Wraps a single piece of data of type `T`.
 
 ### Graph
 
-Owns a dynamic node array and the associated adjacency matrix. `T` must derive from `Persistable` for `save()` and `load()` to work.
+Owns a dynamic node array and the associated adjacency matrix. `T` must derive from `Persistable`, enforced by a `static_assert` at compile time.
 
 > **Note:** the graph doesn't allow loops. This means values across the main diagonal are all 0.
 
@@ -154,17 +154,16 @@ CPPGraph vX.x
 
 ## Interactive Mode
 
-The interactive mode can be used to run tests and play with the graph in a console-like interface. A sample `Graph<int>` is available with 4 nodes in the interactive mode.
+The interactive mode is a console-like interface for experimenting with the graph. A `Graph<PInt>` with 4 nodes (0–3) is preloaded. Edges are visualized as an ASCII diagram with the nodes arranged in a square. The save file is automatically cleaned up when the session ends.
 
 ### Available Commands
 
 - `help`: prints available commands
-- `test`: runs the **gtest_lite** tests
-- `print`: prints the graph
-- `connect {node1} {node2}`: adds an edge between `node1` and `node2`
-- `disconnect {node1} {node2}`: removes edge between `node1` and `node2`
+- `print`: prints the graph as an ASCII diagram
+- `connect {u} {v}`: adds an edge between nodes `u` and `v`
+- `disconnect {u} {v}`: removes edge between nodes `u` and `v`
 - `connected`: checks if the graph is connected
-- `save`: saves the current graph state
+- `save`: saves the current graph state to a temporary file
 - `load`: loads previously saved graph state
 - `exit`: exits interactive mode
 
@@ -173,22 +172,27 @@ The interactive mode can be used to run tests and play with the graph in a conso
 ```
 CPPGraph Interactive mode
 Type 'help' for available commands
+> print
+0   1
 
-> print
-no edges
+
+
+2   3
+> connected
+false
+> connect 0 1
 > connect 1 2
+> connect 1 3
 > print
-1--2
-> connect 2 3
-> connect 3 4
-> print
-1--2
-2--3
-3--4
+0---1
+   /|
+  / |
+ /  |
+2   3
 > connected
 true
 > save
-> disconnect 2 3
+> disconnect 1 2
 > connected
 false
 > load

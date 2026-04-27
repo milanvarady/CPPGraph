@@ -1,22 +1,10 @@
 #pragma once
 
-#include "../src/graph.h"
-#include "../lib/gtest_lite.h"
-
 #include <string>
 
-// Simple Persistable int wrapper for testing
-class PInt : public Persistable {
-    int value;
-
-public:
-    PInt() : value(0) {}
-    PInt(int v) : value(v) {}
-    PInt(const std::string& s) : value(std::stoi(s)) {}
-    std::string encode() const { return std::to_string(value); }
-    int get() const { return value; }
-    bool operator==(const PInt& other) const { return value == other.value; }
-};
+#include "../lib/gtest_lite.h"
+#include "../src/graph.h"
+#include "../src/pint.h"
 
 inline std::ostream& operator<<(std::ostream& os, const PInt& p) {
     os << p.get();
@@ -343,9 +331,7 @@ inline void graph_tests() {
     ENDM
 
     TEST(Graph, LoadInvalidFileThrows) {
-        EXPECT_THROW(
-            Graph<PInt>().load("/tmp/nonexistent_file_cppgraph.txt"),
-            std::runtime_error);
+        EXPECT_THROW(Graph<PInt>().load("/tmp/nonexistent_file_cppgraph.txt"), std::runtime_error);
     }
     ENDM
 }

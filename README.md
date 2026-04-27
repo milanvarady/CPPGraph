@@ -16,6 +16,12 @@ make
 make test
 ```
 
+### Run Interactive Playground
+
+```
+make play
+```
+
 ### Clean
 
 ```

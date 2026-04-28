@@ -5,8 +5,11 @@ memory/
 # Build output
 build/
 
-# Doxide output
-doxide/
+# Doxide generated API reference
+doxide/*
+!doxide/overrides/
+!doxide/javascripts/
+!doxide/stylesheets/
 
 # MKDocs site
 site/

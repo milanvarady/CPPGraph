@@ -25,11 +25,14 @@ jobs:
           python-version: "3.x"
 
       - name: Install doxide
-        run: pipx install doxide
+        run: |
+          echo 'deb http://download.indii.org/deb noble main' | sudo tee /etc/apt/sources.list.d/indii.org.list
+          curl -fsSL https://download.indii.org/deb/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/indii.org.gpg > /dev/null
+          sudo apt-get update
+          sudo apt-get install -y doxide
 
       - name: Install mkdocs and plugins
-        run: |
-          pip install mkdocs-material mkdocs-awesome-pages-plugin
+        run: pip install mkdocs-material mkdocs-awesome-pages-plugin
 
       - name: Build docs
         run: |

@@ -9,5 +9,6 @@ class Persistable {
 public:
     /// Serializes the object to a string representation.
     virtual std::string encode() const = 0;
+    /// Virtual destructor.
     virtual ~Persistable() {}
 };

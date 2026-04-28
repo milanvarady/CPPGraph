@@ -10,11 +10,17 @@ class Node {
     T data;
 
 public:
+    /// Default constructor.
     Node();
+    /// Constructs a node with the given data.
     Node(const T&);
+    /// Deep copy assignment.
     Node& operator=(const Node&);
+    /// Equality comparison based on stored data.
     bool operator==(const Node<T>&) const;
+    /// Returns a const reference to the stored data.
     const T& getData() const;
+    /// Replaces the stored data.
     void setData(const T&);
 };
 

@@ -23,8 +23,11 @@ class Graph {
     size_t edgeCount;
 
 public:
+    /// Default constructor. Creates an empty graph.
     Graph();
+    /// Copy constructor. Deep copies nodes, matrix, and edge count.
     Graph(const Graph&);
+    /// Deep copy assignment.
     Graph& operator=(const Graph&);
 
     /// Adds a node and expands the adjacency matrix.
@@ -43,15 +46,19 @@ public:
     /// @throw `std::out_of_range` if indices are out of bounds.
     void removeEdge(size_t from_idx, size_t to_idx);
 
+    /// Checks if an edge exists between two nodes.
     /// @throw `std::out_of_range` if indices are out of bounds.
     bool hasEdge(size_t from_idx, size_t to_idx) const;
+    /// Returns the number of nodes.
     size_t getNodeCount() const;
+    /// Returns the number of edges. O(1) operation.
     size_t getEdgeCount() const;
 
     /// Checks if all nodes are reachable from node 0 using BFS.
     /// Empty graphs and single node graphs are considered connected.
     bool isConnected() const;
 
+    /// Returns a const reference to the node at the given index.
     /// @throw `std::out_of_range` if `idx` >= node count.
     const Node<T>& getNode(size_t idx) const;
 
@@ -77,12 +84,18 @@ private:
 
     public:
         /// @param capacity Maximum number of elements (allocates capacity + 1).
+        /// Creates a queue with the given maximum capacity.
+        /// @param capacity Maximum number of elements (allocates capacity + 1).
         Queue(size_t capacity);
+        /// Destructor. Frees the underlying buffer.
         ~Queue();
 
+        /// Adds an index to the back of the queue.
         void enqueue(size_t idx);
+        /// Removes and returns the index at the front.
         /// @throw `std::out_of_range` if the queue is empty.
         size_t dequeue();
+        /// Returns `true` if the queue has no elements.
         bool isEmpty() const;
     };
 };

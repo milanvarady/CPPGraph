@@ -19,8 +19,11 @@ public:
     /// Creates an array of given size, filled with a default value.
     Array(size_t size, T default_value);
 
+    /// Copy constructor. Deep copies all elements.
     Array(const Array&);
+    /// Destructor. Frees the underlying buffer.
     ~Array();
+    /// Deep copy assignment.
     Array& operator=(const Array&);
 
     /// Element access with bounds checking.
@@ -32,6 +35,7 @@ public:
     /// @throw `std::out_of_range` if the array is empty.
     T& first();
 
+    /// Returns the current number of elements.
     size_t getSize() const;
 
     /// Appends an element. Doubles capacity if full.

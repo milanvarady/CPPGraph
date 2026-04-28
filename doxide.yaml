@@ -1,0 +1,5 @@
+title: CPPGraph
+description: Generic undirected graph library in C++11 for a university project
+output: doxide
+files:
+  - "src/*.h"

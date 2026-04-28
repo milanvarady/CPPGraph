@@ -5,6 +5,12 @@ memory/
 # Build output
 build/
 
+# Doxide output
+doxide/
+
+# MKDocs site
+site/
+
 # Created by https://www.toptal.com/developers/gitignore/api/macos,cmake,clion,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,cmake,clion,visualstudiocode
 

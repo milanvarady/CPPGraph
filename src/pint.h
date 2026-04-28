@@ -2,6 +2,7 @@
 
 #include "persistable.h"
 
+/// @brief Persistable integer wrapper. Used by the playground and tests.
 class PInt : public Persistable {
     int value;
 

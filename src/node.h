@@ -3,6 +3,8 @@
 #include <iostream>
 #include <ostream>
 
+/// @brief Wraps a single piece of data for use in Graph.
+/// @tparam T The data type stored by the node.
 template<typename T>
 class Node {
     T data;

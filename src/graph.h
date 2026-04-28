@@ -11,37 +11,64 @@
 #include <string>
 #include <type_traits>
 
+/// @brief Generic undirected graph using an adjacency matrix.
+/// Self-loops are not allowed. T must derive from Persistable.
+/// @tparam T Node data type. Must derive from Persistable.
 template<typename T>
 class Graph {
     static_assert(std::is_base_of<Persistable, T>::value, "T must derive from Persistable");
 
     Array<Node<T>> nodes;
-    Array<Array<bool>> matrix;
+    Array<Array<bool>> matrix; ///< Symmetric nxn adjacency matrix.
     size_t edgeCount;
 
 public:
     Graph();
     Graph(const Graph&);
-
     Graph& operator=(const Graph&);
 
+    /// @brief Adds a node and expands the adjacency matrix.
     void addNode(const T&);
+
+    /// @brief Removes a node and its edges, shrinks the matrix.
+    /// @throws std::out_of_range if idx >= node count.
     void removeNode(size_t idx);
+
+    /// @brief Connects two nodes. No-op if edge already exists.
+    /// @throws std::out_of_range if indices are out of bounds.
+    /// @throws GraphError::SelfLoopNotAllowed if from_idx == to_idx.
     void addEdge(size_t from_idx, size_t to_idx);
+
+    /// @brief Removes an edge. No-op if edge does not exist.
+    /// @throws std::out_of_range if indices are out of bounds.
     void removeEdge(size_t from_idx, size_t to_idx);
 
+    /// @throws std::out_of_range if indices are out of bounds.
     bool hasEdge(size_t from_idx, size_t to_idx) const;
     size_t getNodeCount() const;
     size_t getEdgeCount() const;
+
+    /// @brief Checks if all nodes are reachable from node 0 using BFS.
+    /// Empty graphs and single node graphs are considered connected.
     bool isConnected() const;
+
+    /// @throws std::out_of_range if idx >= node count.
     const Node<T>& getNode(size_t idx) const;
 
+    /// @brief Prints node list and adjacency matrix to the given stream.
     void print(std::ostream&) const;
 
+    /// @brief Saves the graph to a text file.
+    /// @throws std::runtime_error if the file cannot be opened.
     void save(const std::string& path) const;
+
+    /// @brief Loads a graph from a text file, replacing current state.
+    /// @throws std::runtime_error if the file cannot be opened or is invalid.
     void load(const std::string& path);
 
 private:
+    /// @brief Fixed size circular buffer queue for BFS. Stores node indices.
+    /// Allocates nodeCount + 1 slots (sentinel) to distinguish full from empty.
     class Queue {
         size_t* data;
         size_t head;
@@ -49,10 +76,12 @@ private:
         size_t capacity;
 
     public:
+        /// @param capacity Maximum number of elements (allocates capacity + 1).
         Queue(size_t capacity);
         ~Queue();
 
         void enqueue(size_t idx);
+        /// @throws std::out_of_range if the queue is empty.
         size_t dequeue();
         bool isEmpty() const;
     };
@@ -61,6 +90,7 @@ private:
 // Graph exceptions
 
 namespace GraphError {
+/// @brief Thrown when attempting to add a self-loop edge.
 class SelfLoopNotAllowed : public std::logic_error {
 public:
     SelfLoopNotAllowed() : std::logic_error("Self-loop not allowed") {}

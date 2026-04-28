@@ -13,6 +13,7 @@ classDiagram
         +operator[](size_t) T&
         +first() T&
         +getSize() size_t
+        +clear()
     }
 
     class Node~T~ {

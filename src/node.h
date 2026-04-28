@@ -3,7 +3,7 @@
 #include <iostream>
 #include <ostream>
 
-/// @brief Wraps a single piece of data for use in Graph.
+/// Wraps a single piece of data for use in `Graph`.
 /// @tparam T The data type stored by the node.
 template<typename T>
 class Node {
@@ -19,7 +19,7 @@ public:
 };
 
 template<typename T>
-Node<T>::Node() {};
+Node<T>::Node() {}
 
 template<typename T>
 Node<T>::Node(const T& data) : data(data) {}

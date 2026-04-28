@@ -3,7 +3,7 @@
 #include <cstddef>
 #include <stdexcept>
 
-/// @brief Dynamic array with automatic capacity management.
+/// Dynamic array with automatic capacity management.
 /// @tparam T Element type. Must be default-constructible and copy-assignable.
 template<typename T>
 class Array {
@@ -12,36 +12,36 @@ class Array {
     size_t capacity;
 
 public:
-    /// @brief Creates an empty array with given initial capacity.
+    /// Creates an empty array with given initial capacity.
     /// @param capacity Initial capacity (default 10, minimum 1).
     Array(size_t capacity = 10);
 
-    /// @brief Creates an array of given size, filled with a default value.
+    /// Creates an array of given size, filled with a default value.
     Array(size_t size, T default_value);
 
     Array(const Array&);
     ~Array();
     Array& operator=(const Array&);
 
-    /// @brief Element access with bounds checking.
-    /// @throws std::out_of_range if idx >= size.
+    /// Element access with bounds checking.
+    /// @throw `std::out_of_range` if `idx` >= `size`.
     T& operator[](size_t);
     const T& operator[](size_t) const;
 
-    /// @brief Returns reference to the first element.
-    /// @throws std::out_of_range if the array is empty.
+    /// Returns reference to the first element.
+    /// @throw `std::out_of_range` if the array is empty.
     T& first();
 
     size_t getSize() const;
 
-    /// @brief Appends an element. Doubles capacity if full.
+    /// Appends an element. Doubles capacity if full.
     void pushBack(const T&);
 
-    /// @brief Removes element at index, shifts remaining elements down.
-    /// @throws std::out_of_range if idx >= size.
+    /// Removes element at index, shifts remaining elements down.
+    /// @throw `std::out_of_range` if `idx` >= `size`.
     void removeAt(size_t);
 
-    /// @brief Removes all elements. Keeps allocated capacity.
+    /// Removes all elements. Keeps allocated capacity.
     void clear();
 };
 

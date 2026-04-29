@@ -22,8 +22,12 @@ fi
 
 # Stage flat: program headers + test headers + test main as main.cpp
 cp src/graph.h src/array.h src/node.h src/persistable.h src/pint.h "$STAGE/"
+cp src/playground.h src/playground.cpp "$STAGE/"
 cp test/array_test.h test/node_test.h test/graph_test.h "$STAGE/"
 cp test/main.cpp "$STAGE/main.cpp"
+
+# Hotfix: JPorta sandboxes /tmp; rewrite test paths to bare filenames (cwd)
+sed -i '' 's|/tmp/\(cppgraph_test[0-9]*\.txt\)|\1|g; s|/tmp/\(nonexistent_file_cppgraph\.txt\)|\1|g' "$STAGE/graph_test.h"
 
 # ZIP from inside staging so paths are bare
 ( cd "$STAGE" && zip "../cppgraph_source.zip" * )

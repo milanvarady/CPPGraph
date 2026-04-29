@@ -100,7 +100,7 @@ Each class is tested in a separate file under `test/`. The tests cover:
 
 ### Memory Leak Detection
 
-Memory leak detection is handled by the **memtrace** module, which is included in every compilation unit via the `-DMEMTRACE` compiler flag.
+Memory leak detection is handled by the **memtrace** module, which is included in every compilation unit via `#include "memtrace.h"`.
 
 All 53 tests pass with no memory leaks detected:
 

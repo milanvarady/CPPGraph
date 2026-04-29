@@ -1,3 +1,5 @@
+# Specification
+
 ## Overview
 
 The project implements a generic undirected graph in C++11. The graph uses an adjacency matrix for storage, with nodes represented by a dedicated class. Tests are written in a separate module. The graph can be experimented with using a simple interactive program.

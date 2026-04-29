@@ -43,6 +43,7 @@ nav:
 plugins:
   - search
   - awesome-pages
+  - print-site
 extra_css:
   - stylesheets/doxide.css
 extra_javascript:

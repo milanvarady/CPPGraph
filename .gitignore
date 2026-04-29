@@ -5,6 +5,9 @@ memory/
 # Build output
 build/
 
+# Submission bundle
+dist/
+
 # Doxide generated API reference
 doxide/*
 !doxide/overrides/

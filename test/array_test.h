@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../src/array.h"
-#include "../lib/gtest_lite.h"
+#include "array.h"
+#include "gtest_lite.h"
 
 inline void array_tests() {
     // Constructor

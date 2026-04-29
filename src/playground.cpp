@@ -3,6 +3,8 @@
 #include <sstream>
 #include <string>
 
+#include "memtrace.h"
+
 #include "playground.h"
 
 static const char* GREEN = "\033[32;1m";

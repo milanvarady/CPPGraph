@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../src/node.h"
-#include "../lib/gtest_lite.h"
+#include "node.h"
+#include "gtest_lite.h"
 
 #include <sstream>
 #include <string>

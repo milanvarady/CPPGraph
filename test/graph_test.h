@@ -2,9 +2,9 @@
 
 #include <string>
 
-#include "../lib/gtest_lite.h"
-#include "../src/graph.h"
-#include "../src/pint.h"
+#include "gtest_lite.h"
+#include "graph.h"
+#include "pint.h"
 
 inline std::ostream& operator<<(std::ostream& os, const PInt& p) {
     os << p.get();

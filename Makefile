@@ -2,7 +2,7 @@ BUILD = build
 TEST_PROG = $(BUILD)/cppgraph_test
 PLAY_PROG = $(BUILD)/cppgraph
 
-CXXFLAGS = -std=c++11 -Wall -Werror -g -DMEMTRACE
+CXXFLAGS = -std=c++11 -Wall -Werror -g -DMEMTRACE -Isrc -Itest -Ilib
 
 SRCS = $(wildcard src/*.h) $(wildcard test/*.h) $(wildcard lib/*.h)
 
